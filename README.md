@@ -1,6 +1,6 @@
 # ReverseBlockChainShell
 RBCS (Reverse BlockChain Shell) is a tool that allows you to execute commands on a remote station running with complete anonymity.\
-RBCS can work on any Ethereum based network, e.g. Ethereum-MainNet or all other testnets.
+RBCS can work on any <a href="https://ethereum.org/en/">Ethereum</a> based network, e.g. Ethereum-MainNet or all other testnets.
 
 ## TestNets vs. MainNet
 If you choose to use a testnet and not the mainnet, you won't need to pay real money to use the tool. Because testnet's ether is worthless.\
