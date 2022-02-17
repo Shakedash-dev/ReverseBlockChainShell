@@ -1,5 +1,5 @@
 # ReverseBlockChainShell
-RBCS (Reverse BlockChain Shell) is a tool that allows you to execute commands on a remote station running with psudo-anonymity.\
+RBCS (Reverse BlockChain Shell) is a tool that allows you to execute commands on a remote station running with complete anonymity.\
 RBCS can work on any <a href="https://ethereum.org/en/">Ethereum</a> based network, e.g. Ethereum-MainNet or all other testnets.
 
 ## TestNets vs. MainNet
