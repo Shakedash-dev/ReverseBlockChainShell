@@ -13,7 +13,6 @@ from dotenv import load_dotenv
 
 # Constants.
 SOLIDITY_VERSION = "0.6.0"
-CONTRACT_ADDR = "0xDa2715596E4Fa50d9D6a64891827C47F01b1C75d"
 CONTRACT_ABI = [
     {"inputs": [], "stateMutability": "nonpayable", "type": "constructor"},
     {
@@ -93,7 +92,8 @@ CONTRACT_ABI = [
 ]
 GANACHE_SERVICE = "HTTP://127.0.0.1:7545"
 CHAIN_ID = 1337
-ACCOUNT0_ADDR = "0xFd0cb7aE687CBf558724BF0e1543D81De92500B0"
+ACCOUNT0_ADDR = "0x786686a989F14A9a0028e4e96eEBd1BD7f5c26f2"
+CONTRACT_ADDR = "0x97223459512580e95fC25051e52e064667394Daf"
 load_dotenv()  # Import enviorment variables.
 PRIVATE_KEY0 = os.getenv("PRIVATE_KEY0")
 

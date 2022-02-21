@@ -22,7 +22,8 @@ CONTRACT_NAME = "Shell"
 CONTRACT_FILE_PATH = "CnC.sol"
 GANACHE_SERVICE = "HTTP://127.0.0.1:7545"
 TESTNET_ID = 1337
-ACCOUNT0_ADDR = "0xFd0cb7aE687CBf558724BF0e1543D81De92500B0"
+ACCOUNT0_ADDR = "0x786686a989F14A9a0028e4e96eEBd1BD7f5c26f2"
+COMPILED_CONTRACT_PATH = "CompiledContract.json"
 
 # Main
 def main():
@@ -31,11 +32,10 @@ def main():
     load_dotenv()
 
     # Compile contract.
-    compiled_file = open("CompiledContract.json", "w")
     compiled_contract = CompileContrat(CONTRACT_FILE_PATH)
 
     # Dump the compiled contract into a json and get the abi and bytecode out of it.
-    json.dump(compiled_contract, compiled_file)
+    ExportContract(compiled_contract, COMPILED_CONTRACT_PATH)
     bytecode = compiled_contract["contracts"][CONTRACT_FILE_PATH][CONTRACT_NAME]["evm"][
         "bytecode"
     ]["object"]
@@ -62,7 +62,16 @@ def main():
     tx_hash = w3_engine.eth.send_raw_transaction(DeployTx.rawTransaction)
     tx_receipt = w3_engine.eth.wait_for_transaction_receipt(tx_hash)
     print(f"Contract Address: {tx_receipt.contractAddress}")
-    print(abi)
+
+
+# ExportContract exports the compiled contract to a json.
+def ExportContract(compiled_contract, path):
+    compiled_file = open(path, "w")
+    json.dump(compiled_contract, compiled_file)
+    bytecode = compiled_contract["contracts"][CONTRACT_FILE_PATH][CONTRACT_NAME]["evm"][
+        "bytecode"
+    ]["object"]
+    abi = compiled_contract["contracts"][CONTRACT_FILE_PATH][CONTRACT_NAME]["abi"]
 
 
 # This function gets a path to a solidity smart contract and upload it to the blockchain.
