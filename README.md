@@ -7,7 +7,7 @@ TestNets are tricky. Most of them are proof-of-authority, which makes it a probl
 **But** thankfully we have <a href="https://github.com/ethereum/ropsten">Ropsten</a>. Ropsten is a PoW (Proof of Work) testnet.\
 If you choose to use a testnet and not the mainnet, you won't need to pay real money to use the tool. Because testnet's ether is worthless.\
 But testnets require some sort of authentication to gather test-Ether so this can leave a lead to the identity of the user.\
-The tool uses a specific wallet that can only be traced to me (the developer), and not the user (you). But it will runout eventually and in that case you'll need to change a wallet.\
+The tool uses a specific wallet that can only be traced to me (the developer), and not the user (you). But it will runout eventually and in that case you'll need to change a wallet.
 
 ## Usage
 To use this tool you will need to follow these steps:
