@@ -3,7 +3,7 @@ RBCS (Reverse BlockChain Shell) is a tool that allows you to execute commands on
 RBCS can work on any <a href="https://ethereum.org/en/">Ethereum</a> based network, e.g. Ethereum-MainNet or all other testnets.
 
 ## TestNets vs. MainNet
-TestNets are tricky. Most of them are proof-of-authority, which makes it a problem for us.\
+TestNets are tricky. Most of them are proof-of-authority, which makes it psudo-anonymus.\
 **But** thankfully we have <a href="https://github.com/ethereum/ropsten">Ropsten</a>. Ropsten is a PoW (Proof of Work) testnet.\
 If you choose to use a testnet and not the mainnet, you won't need to pay real money to use the tool. Because testnet's ether is worthless.\
 But testnets require some sort of authentication to gather test-Ether so this can leave a lead to the identity of the user.\
