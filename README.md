@@ -2,6 +2,8 @@
 RBCS (Reverse BlockChain Shell) is a tool that allows you to execute commands on a remote station running with complete anonymity.\
 RBCS can work on any <a href="https://ethereum.org/en/">Ethereum</a> based network, e.g. Ethereum-MainNet or all other testnets.
 
+![RBCS POC](https://github.com/Shakedash-dev/ReverseBlockChainShell/blob/main/RBCS.jpg)
+
 ## TestNets vs. MainNet
 TestNets are tricky. Most of them are proof-of-authority, which makes it psudo-anonymus.\
 **But** thankfully we have <a href="https://github.com/ethereum/ropsten">Ropsten</a>. Ropsten is a PoW (Proof of Work) testnet.\
