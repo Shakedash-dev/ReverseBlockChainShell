@@ -1,5 +1,5 @@
-## Name        : ReverseBlockChainShell_Server_init_.py
-## Date        : 30.01.2022
+## Name        : RBCS_Init.py
+## Date        : 23.2.2022
 ## Author      : Shkedo
 ## Description : This program will create a smart contract to connect to from the victim and attacker.
 ##               The program will print the address of the contract.

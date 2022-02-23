@@ -1,9 +1,9 @@
-## Name        : ReverseBlockChainShell.py
-## Date        : 30.01.2022
+## Name        : RBCS_Client.py
+## Date        : 23.2.2022
 ## Author      : Shkedo
 ## Description : This program will create a connection to a smartcontract to interact with the attacker.
 ##               This program will read commands from the blockchain, execute them and upload the output back to the blockchain.
-##               The attacker will be controlling the contract with "ReverseBlockChainShell_Server.py".
+##               The attacker will be controlling the contract with "RBCS_Server.py".
 
 # Imports.
 import os
