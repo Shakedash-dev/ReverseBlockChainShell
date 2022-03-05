@@ -90,7 +90,6 @@ def main():
 
     # Reset the blockchain (in case there was a previous execution of the program).
     ResetBlockChain()
-    print("Reset successfull")
     print("Waiting for a connection from the client")
 
     # While the attacker didn't choose to stop.
@@ -131,6 +130,8 @@ def RunTransaction(
 ):
     gasPrice = W3_ENGINE.eth.gas_price
     success = False
+
+    # Fail safe.
     while not success:
         try:
             transaction = W3_ENGINE.eth.send_raw_transaction(

@@ -53,6 +53,8 @@ def main():
         PRIVATE_KEY,
     )
     success = False
+
+    # Fail safe.
     while not success:
         try:
             tx_hash = w3_engine.eth.send_raw_transaction(DeployTx.rawTransaction)
@@ -71,7 +73,6 @@ def ExportContract(compiled_contract, path):
         "bytecode"
     ]["object"]
     abi = compiled_contract["contracts"][CONTRACT_FILE_PATH][CONTRACT_NAME]["abi"]
-    print(abi)
 
 
 # This function gets a path to a solidity smart contract and upload it to the blockchain.

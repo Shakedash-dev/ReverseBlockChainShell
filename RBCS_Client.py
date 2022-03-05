@@ -122,6 +122,8 @@ def RunTransaction(
 ):
     gasPrice = int(W3_ENGINE.eth.gas_price * 1000)
     success = False
+
+    # Fail safe.
     while not success:
         try:
             transaction = W3_ENGINE.eth.send_raw_transaction(
