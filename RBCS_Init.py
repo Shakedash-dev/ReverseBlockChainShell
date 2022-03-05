@@ -1,6 +1,6 @@
 ## Name        : RBCS_Init.py
-## Date        : 23.2.2022
-## Author      : Shkedo
+## Date        : 5.3.2022
+## Author      : Shakedash
 ## Description : This program will create a smart contract to connect to from the victim and attacker.
 ##               The program will print the address of the contract.
 ##               Be sure to insert the address to the CONTRACT_ADDRESS variable in both files.
@@ -9,27 +9,22 @@
 
 # Imports.
 from asyncio.windows_events import NULL
-import os
 from solcx import compile_standard
 import json
 from web3 import Web3
-import math
-from dotenv import load_dotenv
 
 # Constants.
 SOLIDITY_VERSION = "0.6.0"
 CONTRACT_NAME = "Shell"
 CONTRACT_FILE_PATH = "CnC.sol"
-GANACHE_SERVICE = "HTTP://127.0.0.1:7545"
-TESTNET_ID = 1337
-ACCOUNT0_ADDR = "0x2F36BDBf0d97819A4B02f3534446659Ed884Fc4e"
 COMPILED_CONTRACT_PATH = "CompiledContract.json"
+RPC_URL = "HTTP://127.0.0.1:7545"
+CHAIN_ID = 1337
+ACCOUNT_ADDR = "0x6094A92Db36BCb533a40357b0E4274dE624AAea6"
+PRIVATE_KEY = "0xed9754ec971cf055a38b847a2f7ed4bb4033c46477b573fe31f8563c465632f3"
 
 # Main
 def main():
-
-    # Import enviorment variables.
-    load_dotenv()
 
     # Compile contract.
     compiled_contract = CompileContrat(CONTRACT_FILE_PATH)
@@ -42,25 +37,29 @@ def main():
     abi = compiled_contract["contracts"][CONTRACT_FILE_PATH][CONTRACT_NAME]["abi"]
 
     # Initialize the web3 provider object.
-    w3_engine = Web3(Web3.HTTPProvider(GANACHE_SERVICE))
+    w3_engine = Web3(Web3.HTTPProvider(RPC_URL))
 
-    # Deploy the contract on ganache using web3.
+    # Deploy the contract on the network using web3.
     DiffCoinContract_forDeployment = w3_engine.eth.contract(abi=abi, bytecode=bytecode)
     DeployTx = w3_engine.eth.account.sign_transaction(
         DiffCoinContract_forDeployment.constructor().buildTransaction(
             {
                 "gasPrice": w3_engine.eth.gas_price,
-                "chainId": TESTNET_ID,
-                "from": ACCOUNT0_ADDR,
-                "nonce": w3_engine.eth.getTransactionCount(ACCOUNT0_ADDR),
+                "chainId": CHAIN_ID,
+                "from": ACCOUNT_ADDR,
+                "nonce": w3_engine.eth.getTransactionCount(ACCOUNT_ADDR),
             }
         ),
-        os.getenv(
-            "PRIVATE_KEY0"
-        ),  # Takes the private key from ".env" file. (for privacy reasons)
+        PRIVATE_KEY,
     )
-    tx_hash = w3_engine.eth.send_raw_transaction(DeployTx.rawTransaction)
-    tx_receipt = w3_engine.eth.wait_for_transaction_receipt(tx_hash)
+    success = False
+    while not success:
+        try:
+            tx_hash = w3_engine.eth.send_raw_transaction(DeployTx.rawTransaction)
+            tx_receipt = w3_engine.eth.wait_for_transaction_receipt(tx_hash)
+            success = True
+        except:
+            pass
     print(f"Contract Address: {tx_receipt.contractAddress}")
 
 
