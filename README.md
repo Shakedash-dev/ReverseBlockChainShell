@@ -17,6 +17,7 @@ This tool is setup to work on ganache for POC. To use this tool on a real networ
 2. Give it some ETH.
 3. Set `ACCOUNT_ADDR` to the your account address in `RBCS_Init.py`, `RBCS_Server.py`, and `RBCS_Client.py`.
 3. Set `PRIVATE_KEY` to the your account's private key in `RBCS_Init.py`, `RBCS_Server.py`, and `RBCS_Client.py`.
+4. Get an RPC URL from the internet in one way or another and set `RPC_URL` to it in `RBCS_Init.py`, `RBCS_Server.py`, and `RBCS_Client.py`.
 
 ## Usage
 To use this tool you will need to follow these steps:
