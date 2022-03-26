@@ -9,7 +9,7 @@ RBCS can work on any <a href="https://ethereum.org/en/">Ethereum</a> based netwo
 | ----------- | ----------- |
 | Complete Anonimity | Require internet connection on both sides |
 |  | Takes time to run each command |
-|  | Setup requires some blockchain knowledge |
+|  | Setup requires basic blockchain knowledge |
 
 ## Requirements
 This tool is setup to work on ganache for POC. To use this tool on a real network, you'll need to do the following steps:
