@@ -29,3 +29,6 @@ To use this tool you will need to follow these steps:
 ## Dependencies
 python3 in any version.\
 Connection to the internet on both server and client.
+
+## Note
+This script is intended for EDUCATIONAL USE ONLY. It is not meant to be used for illicit intent, and any misuse of this software will not be the responsibility of the author.
